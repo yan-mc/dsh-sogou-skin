@@ -369,7 +369,10 @@ export function assembleSkin(project, projectDir) {
  * @param {string} slot @param {object} role
  */
 function makePlaceholder(slot, role) {
-    const hue = role.hue ?? 0.72;
+    // 默认色相 0.474 = 171°（青玉），与 Skin.ini 的默认主题色一致。
+    // 这里原来是 0.72 = 259°（紫罗兰）；而且它【显式传给】 placeholder*，
+    // 覆盖掉了 placeholder.js 里的默认值 —— 所以只改那边是没用的。
+    const hue = role.hue ?? 0.474;
     const size = role.size || {};
     const geo = placeholderGeometry(slot, size);
     let raster;

@@ -290,10 +290,11 @@ export function defaultSkinIni(meta = {}) {
         'font_size=' + (meta.fontSize ?? 16),
         'font_ch=' + (meta.fontCh || '微软雅黑'),
         'font_en=' + (meta.fontEn || 'Arial'),
-        'pinyin_color=' + (meta.pinyinColor || '0x8e4646'),
-        'zhongwen_first_color=' + (meta.firstColor || '0x9b1562'),
-        'zhongwen_color=' + (meta.zhongwenColor || '0xaf5f5f'),
-        'comphint_color=' + (meta.compHintColor || '0xff00d9'),
+        // 注意是 0xBBGGRR（Windows COLORREF），不是 RGB —— 所以 R 在最低字节。
+        'pinyin_color=' + (meta.pinyinColor || '0x635f1d'),
+        'zhongwen_first_color=' + (meta.firstColor || '0x524a0f'),
+        'zhongwen_color=' + (meta.zhongwenColor || '0x746f2a'),
+        'comphint_color=' + (meta.compHintColor || '0x408ab0'),
         'use_gdip=1',
         'aero=0',
         'glow=0',
@@ -328,12 +329,18 @@ export function defaultProject(meta = {}) {
             hover: { mode: 'lighten', amount: 0.10 },
             down: { mode: 'darken', amount: 0.16 },
         },
-        /** 配色（#rrggbb），会换算成 BGR 写进 Skin.ini */
+        /**
+         * 配色（#rrggbb），会换算成 BGR 写进 Skin.ini。
+         *
+         * 这是一套中性的青玉/暗金，和程序化占位素材的配色一致。
+         * 早先默认是紫红系（#9b1562 / #ff00d9），和占位素材的青玉金冲突，
+         * 生成出来的预览图看起来像两套设计拼在一起。
+         */
         theme: {
-            pinyinColor: '#8e4646',
-            firstColor: '#9b1562',
-            zhongwenColor: '#af5f5f',
-            compHintColor: '#ff00d9',
+            pinyinColor: '#1d5f63',
+            firstColor: '#0f4a52',
+            zhongwenColor: '#2a6f74',
+            compHintColor: '#b08a40',
         },
         /** 九宫格可拉伸边；null = 自动探测 */
         nineSlice: {},

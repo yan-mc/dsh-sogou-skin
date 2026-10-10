@@ -56,6 +56,8 @@ function artZone(r, x0, x1, y0, y1, color, alpha) {
 /** 面板几何参数：占位图的九宫格与文字边距（与绘制逻辑严格对应）。 */
 export function placeholderGeometry(slot, opts = {}) {
     if (slot === 'panel_h') {
+        // 默认色相 0.474 = 171°（青玉）。早先默认写的是 0.72 = 259°（紫罗兰），
+        // 与 Skin.ini 的默认主题色对不上，生成出来的皮肤是紫配青的。
         const W = opts.width ?? 620;
         const H = opts.height ?? 200;
         const barH = 46;
@@ -100,7 +102,7 @@ export function placeholderGeometry(slot, opts = {}) {
 export function placeholderPanelH(opts = {}) {
     const W = opts.width ?? 620;
     const H = opts.height ?? 200;
-    const hue = opts.hue ?? 0.72;
+    const hue = opts.hue ?? 0.474;
     const [cr, cg, cb] = hueToRgb(hue);
     const r = create(W, H, [0, 0, 0, 0]);
     const barH = 46;
@@ -122,7 +124,7 @@ export function placeholderPanelH(opts = {}) {
 export function placeholderPanelV(opts = {}) {
     const W = opts.width ?? 300;
     const H = opts.height ?? 380;
-    const hue = opts.hue ?? 0.72;
+    const hue = opts.hue ?? 0.474;
     const [cr, cg, cb] = hueToRgb(hue);
     const r = create(W, H, [0, 0, 0, 0]);
     const barX = 10;
@@ -137,7 +139,7 @@ export function placeholderPanelV(opts = {}) {
 export function placeholderBar(opts = {}) {
     const W = opts.width ?? 160;
     const H = opts.height ?? 28;
-    const hue = opts.hue ?? 0.72;
+    const hue = opts.hue ?? 0.474;
     const [cr, cg, cb] = hueToRgb(hue);
     const r = create(W, H, [0, 0, 0, 0]);
     roundRect(r, 0, 0, W, H, 7, [cr, cg, cb, 215]);
@@ -152,7 +154,7 @@ export function placeholderBar(opts = {}) {
 export function placeholderIcon(label, opts = {}) {
     const W = opts.width ?? 20;
     const H = opts.height ?? 20;
-    const hue = opts.hue ?? 0.72;
+    const hue = opts.hue ?? 0.474;
     const state = opts.state ?? 'normal';
     const [br, bg, bb] = hueToRgb(hue);
     const shade = state === 'hover' ? 1.12 : state === 'down' ? 0.82 : 1.0;
@@ -181,7 +183,7 @@ export function placeholderIcon(label, opts = {}) {
 
 /** 分体底图占位（窄拉伸条）。 */
 export function placeholderStrip(w, h, opts = {}) {
-    const hue = opts.hue ?? 0.72;
+    const hue = opts.hue ?? 0.474;
     const [cr, cg, cb] = hueToRgb(hue);
     const r = create(w, h, [0, 0, 0, 0]);
     roundRect(r, 0, 0, w, h, Math.min(4, Math.floor(Math.min(w, h) / 3)), [cr, cg, cb, 225]);
