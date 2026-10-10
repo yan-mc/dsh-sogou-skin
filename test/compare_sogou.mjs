@@ -5,8 +5,11 @@ import { decodePng, encodePng } from '../src/image/png.js';
 import { create, paste } from '../src/image/raster.js';
 import { drawText } from '../src/image/font5x7.js';
 
-const D = 'F:/Deepseek_harness/输入法皮肤/06-工作记录/refskins';
-const OUT = 'F:/Deepseek_harness/输入法皮肤/06-工作记录/study';
+import { tmpDir, skip } from './_paths.mjs';
+// 需要从搜狗皮肤站下载的「皮肤包 + 官方渲染图」配对（因版权不在仓库里）。
+const D = process.env.SOGOU_SKIN_REFSKINS || '';
+const OUT = tmpDir('compare-sogou');
+if (skip('与官方渲染逐像素对比（需要 SOGOU_SKIN_REFSKINS 指向 refskins 目录）', D)) process.exit(0);
 mkdirSync(OUT, { recursive: true });
 const items = [];
 for (const [id, label] of [['623069','苍翠欲滴'], ['621752','貂蝉'], ['623089','小白熊']]) {
