@@ -193,8 +193,26 @@ function cmdDemo() {
     if (res.warnings.length) { console.log('\n警告 ' + res.warnings.length + ' 条：'); for (const w of res.warnings) console.log('  ! ' + w); }
 }
 
+/** 校验工程：跑一遍装配，把错误与提示分类列出。出错时返回非零退出码，方便接 CI。 */
+function cmdValidate() {
+    const dir = arg(1);
+    if (!dir) { console.error('用法：cli.js validate <projectDir>'); process.exit(1); }
+    const project = loadProject(dir);
+    const res = assembleSkin(project, dir);
+    const errors = res.errors || [];
+    const warns = res.warnings || [];
+    console.log('校验 ' + dir);
+    console.log('  装配出 ' + res.files.length + ' 个文件');
+    for (const e of errors) console.log('  [错误] ' + e);
+    for (const w of warns) console.log('  [提示] ' + w);
+    if (!errors.length && !warns.length) console.log('  ✓ 通过，没有发现问题');
+    else console.log('  结论：' + errors.length + ' 个错误，' + warns.length + ' 条提示');
+    process.exit(errors.length ? 1 : 0);
+}
+
 const COMMANDS = {
     requirements: cmdRequirements,
+    validate: cmdValidate,
     init: cmdInit,
     scan: cmdScan,
     assemble: cmdAssemble,
@@ -212,6 +230,7 @@ if (!cmd || !COMMANDS[cmd]) {
     console.log('  init <dir> [--name X]              新建皮肤工程');
     console.log('  scan <dir>                         扫描素材目录，输出客观特征');
     console.log('  assemble <projectDir>              按工程配置装配出皮肤目录');
+    console.log('  validate <projectDir>              校验工程（错误返回非零退出码）');
     console.log('  preview <projectDir>               生成预览图（拟真图 + 素材总览）');
     console.log('  pack <projectDir> [--format zip|v3] [--out x.ssf] [--template t.ssf]');
     console.log('  inspect <file.ssf>                 解析皮肤包');

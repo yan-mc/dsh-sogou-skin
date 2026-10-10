@@ -56,14 +56,16 @@
 不装 DSH 也能用：
 
 ```
-node src/cli.js init     <工程目录>
-node src/cli.js scan     <素材目录>
-node src/cli.js assemble <工程目录>
-node src/cli.js preview  <工程目录>
-node src/cli.js pack     <工程目录> [-o 输出.ssf]
-node src/cli.js inspect  <皮肤.ssf>
-node src/cli.js unpack   <皮肤.ssf> -o <目录>
-node src/cli.js validate <工程目录>
+node src/cli.js demo <目录>              # 一条龙演示，立刻得到一个能装的皮肤
+node src/cli.js requirements              # 列出做皮肤需要哪些素材
+node src/cli.js init     <工程目录>        # 建工程
+node src/cli.js scan     <素材目录>        # 扫描素材
+node src/cli.js assemble <工程目录>        # 装配
+node src/cli.js preview  <工程目录>        # 出预览图
+node src/cli.js validate <工程目录>        # 校验（出错返回非零退出码）
+node src/cli.js pack     <工程目录> [-o 输出.ssf] [--format zip|v3]
+node src/cli.js inspect  <皮肤.ssf>        # 解析皮肤包
+node src/cli.js unpack   <皮肤.ssf> [目录]  # 解包皮肤
 ```
 
 ---
