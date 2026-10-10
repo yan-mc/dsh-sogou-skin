@@ -143,15 +143,20 @@ dsh-sogou-skin/
 全部测试**不需要任何外部素材**，在干净 checkout 里可直接运行：
 
 ```
-node test/image.test.mjs      # 图像层
-node test/container.test.mjs  # 容器层（三代格式 + 往返）
-node test/keys.test.mjs       # 键词表
-node test/vocab.test.mjs      # 词表覆盖
-node test/clone.test.mjs      # 克隆保真（逐像素）
-node test/bgcheck_test.mjs    # 白底/黑底对照
-node test/stretch.mjs         # 九宫格拉伸体检
-node test/overlay.mjs         # 浮层预设
-node test/install.test.mjs    # 安装路径探测
+node test/image.test.mjs        # 图像层（PNG/BMP 往返、缩放、九宫格、抠图）
+node test/container.test.mjs    # 容器层（ZIP 与 v3 两代往返 + 内层重建）
+node test/zipdiff.mjs           # ZIP 结构不变量（顺序/方法/version/SD 扩展字段）
+node test/clone.test.mjs        # 克隆保真（配置零差异 + 渲染逐像素一致）
+node test/rowmodel.mjs          # 两排文字的位置公式
+node test/stretch.mjs           # 九宫格在真实窗口尺寸下不退化
+node test/validate_check.mjs    # 校验器（正常工程零错误 + 负例会报错）
+node test/bgcheck_test.mjs      # 白底/黑底对照确实产出
+node test/keys.test.mjs         # 键词表
+node test/vocab.test.mjs        # 词表覆盖率
+node test/overlay.mjs           # 浮层预设 + 修图
+node test/install.test.mjs      # 安装路径探测
+node test/plugin.smoke.mjs      # 插件加载冒烟
+node test/compare_sogou.mjs     # 与官方渲染对拍（需 SOGOU_SKIN_REFSKINS）
 ```
 
 ---
