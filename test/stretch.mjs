@@ -43,7 +43,7 @@ const built = buildSsf(rb.files, { format: 'zip' });
 writeFileSync(join(DIR, '复刻-雷电将军.ssf'), Buffer.from(built.data));
 writeFileSync(join(DIR, 'preview', 'stretch.png'), Buffer.from(toPng(renderStretchTest(rb.files))));
 writeFileSync(join(DIR, 'preview', 'preview.png'), Buffer.from(toPng(renderMock(rb.files, { title: 'SKIN PREVIEW', warnings: rb.warnings }))));
-copyFileSync(join(DIR, '复刻-雷电将军.ssf'), 'F:/Deepseek_harness/输入法皮肤/04-生成产物/复刻-雷电将军.ssf');
+copyFileSync(join(DIR, '复刻-雷电将军.ssf'), join(OUT, '复刻-雷电将军.ssf'));
 console.log('');
 console.log('已重新打包 -> ' + built.bytes + ' 字节，总警告 ' + rb.warnings.length + ' 条');
 for (const w of rb.warnings) console.log('  ! ' + w);

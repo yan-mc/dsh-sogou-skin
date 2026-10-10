@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { create, setPixel, fillRect, paste, replaceColor, removeBackground, outline, adjust, hueShift,
          alphaBBox, getPixel, containFit, clone, resize } from '../src/image/raster.js';
@@ -59,7 +59,8 @@ console.log(res.ini.split('[Scheme_V1]')[1].split('[Scheme_V2]')[0].split('\n').
 // ---- 3) 演示「AI 修图」：拿用户自己皮肤里的一张图标做修复 ----
 console.log('');
 console.log('=== skin_repair 修图演示（用你自己皮肤里的 cn1.bmp） ===');
-const raw = new Uint8Array((await import('node:fs')).readFileSync('F:/Deepseek_harness/输入法皮肤/06-工作记录/extracted/cn1.bmp'));
+// 用前面程序化装配出来的图标，不读任何本机文件
+const raw = new Uint8Array(readFileSync(join(DIR, 'build', 'cn1.bmp')));
 let img = decodeBmp(raw);
 console.log('原图: ' + img.width + 'x' + img.height + ' 四角颜色 ' + [getPixel(img,0,0).slice(0,3), getPixel(img,19,19).slice(0,3)].map(c=>c.join(',')).join(' / '));
 let beforeAfter = [];
@@ -92,5 +93,6 @@ stages.forEach((st, i) => {
   paste(canvas, scaled, x, 24);
   drawText(canvas, labels[i].charCodeAt(0) > 127 ? 'STEP ' + (i + 1) : labels[i], x, 8, [220, 220, 235, 255], 1);
 });
-writeFileSync('F:/Deepseek_harness/输入法皮肤/04-生成产物/预览图/修图演示.png', Buffer.from(encodePng(canvas)));
-console.log('对比图 -> 04-生成产物/预览图/修图演示.png');
+const demoOut = join(tmpDir('repair-demo'), '修图演示.png');
+writeFileSync(demoOut, Buffer.from(encodePng(canvas)));
+console.log('对比图 -> ' + demoOut);

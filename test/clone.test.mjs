@@ -25,8 +25,9 @@ function load(p) {
   const s = readSkin(new Uint8Array(readFileSync(p)));
   return s.entries.map((e) => ({ name: e.name, data: e.data }));
 }
-const A = load('F:/Deepseek_harness/输入法皮肤/00-原始样本/雷电将军影宝.ssf');
-const B = load('F:/Deepseek_harness/输入法皮肤/04-生成产物/复刻-雷电将军.ssf');
+// 用上面已经生成好的克隆产物，不再依赖任何本机路径
+const A = load(sample('雷电将军影宝.ssf'));
+const B = load(OUT);
 
 let fail = 0;
 // 只改身份字段，不影响渲染 —— 所以两个皮肤按同一模型渲染出来必须逐像素一致
