@@ -9,6 +9,9 @@ sogou-skins/
 preview/
 build/
 
+# 示例脚本的输出
+examples/out/
+
 # 编辑器
 .vscode/
 .idea/
