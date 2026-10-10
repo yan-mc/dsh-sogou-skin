@@ -1,0 +1,7 @@
+# dsh-sogou-skin bundle 层：插件行很薄，真正的 11 个 skin_* 工具与 sogou-skin-authoring
+# 技能都在 src/index.js 的 apply() 内注册（ctx.tools.register / ctx.skills.register）。
+# 可选配置：projectsRoot（皮肤工程默认根目录，默认 <cwd>/sogou-skins）。
+- insert:
+    - id: dsh-sogou-skin
+      name: '@dsh-external/dsh-sogou-skin'
+      config: {}

@@ -1,0 +1,14 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# 本地皮肤工程与产物 —— 里面会有用户自己的素材与第三方皮肤数据，不要提交
+sogou-skins/
+*.ssf
+preview/
+build/
+
+# 编辑器
+.vscode/
+.idea/
