@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { IniDoc, decodeIni } from '../src/ssf/ini.js';
 import { readSkin } from '../src/ssf/container.js';
 import { isKnownKey, knownSections } from '../src/skin/spec.js';
+import { sample } from './_paths.mjs';
 
 const sources = [
   ['官方默认皮肤 (Skin.dat v1)', (() => {
@@ -19,8 +20,10 @@ const sources = [
       }
       throw new Error('没找到 Skin.ini');
   })()],
-  ['样本A 明文ZIP', readSkin(new Uint8Array(readFileSync('F:/Deepseek_harness/输入法皮肤/00-原始样本/雷电将军影宝.ssf'))).entries.find(e => e.name.toLowerCase() === 'skin.ini').data],
-  ['样本B v3加密', readSkin(new Uint8Array(readFileSync('F:/Deepseek_harness/输入法皮肤/00-原始样本/原神—雷电将军.ssf'))).entries.find(e => e.name.toLowerCase() === 'skin.ini').data],
+  // 真实样本因版权不在仓库里；用 SOGOU_SKIN_SAMPLES 指目录即可纳入（见 test/_paths.mjs）
+  ...[['样本A 明文ZIP', sample('雷电将军影宝.ssf')], ['样本B v3加密', sample('原神—雷电将军.ssf')]]
+      .filter(([, p]) => p)
+      .map(([label, p]) => [label, readSkin(new Uint8Array(readFileSync(p))).entries.find(e => e.name.toLowerCase() === 'skin.ini').data]),
 ];
 
 let grandUnknown = 0, grandKeys = 0;

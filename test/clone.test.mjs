@@ -5,9 +5,12 @@ import { readSkin } from '../src/ssf/container.js';
 import { renderCandidateWindow } from '../src/skin/render.js';
 import { decodeIni, encodeIni } from '../src/ssf/ini.js';
 import { buildSsf } from '../src/skin/assemble.js';
+import { join } from 'node:path';
+import { sample, tmpDir, skip } from './_paths.mjs';
 {
-    const SRC = 'F:/Deepseek_harness/输入法皮肤/00-原始样本/雷电将军影宝.ssf';
-    const OUT = 'F:/Deepseek_harness/输入法皮肤/04-生成产物/复刻-雷电将军.ssf';
+    const SRC = sample('雷电将军影宝.ssf');
+    const OUT = join(tmpDir('clone'), '复刻-雷电将军.ssf');
+    if (skip('克隆保真比对（需要本地 .ssf 样本）', SRC)) process.exit(0);
     const IDENT = { skin_name: '复刻-雷电将军', skin_version: '1.0', skin_author: 'DSH 皮肤工坊',
         skin_email: '', skin_time: '2026.10.10', skin_info: '按原始结构 1:1 复刻，配置与原版完全一致' };
     const A = readSkin(new Uint8Array(readFileSync(SRC)));

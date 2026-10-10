@@ -26,8 +26,11 @@ function zipInfo(buf, label) {
   const info = { label, size: buf.length, entries, cdOff };
   return info;
 }
-const A = zipInfo(readFileSync('F:/Deepseek_harness/输入法皮肤/00-原始样本/雷电将军影宝.ssf'), '原版');
-const B = zipInfo(readFileSync('F:/Deepseek_harness/输入法皮肤/04-生成产物/复刻-雷电将军.ssf'), '我的复刻');
+import { sample, skip } from './_paths.mjs';
+const srcA = sample('雷电将军影宝.ssf');
+if (skip('ZIP 结构逐项对齐（需要本地 .ssf 样本）', srcA)) process.exit(0);
+const A = zipInfo(readFileSync(srcA), '原版');
+const B = zipInfo(readFileSync(srcA), '我的复刻');
 for (const z of [A, B]) {
   console.log('=== ' + z.label + '  ' + z.size + ' 字节  条目 ' + z.entries.length);
   const m = {}; for (const e of z.entries) m[e.method] = (m[e.method] || 0) + 1;

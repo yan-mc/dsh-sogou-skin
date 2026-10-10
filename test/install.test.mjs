@@ -9,7 +9,8 @@ const inst = reg.find(d => d.name === 'skin_install');
 const list = reg.find(d => d.name === 'skin_list_installed');
 console.log('');
 console.log('--- skin_install dryRun 探测 ---');
-const r1 = await inst.execute({ file: 'F:/Deepseek_harness/输入法皮肤/04-生成产物/复刻-雷电将军.ssf', dryRun: true });
+// 不依赖任何真实文件：随便给个路径，只看它怎么解析安装目标目录
+const r1 = await inst.execute({ file: 'C:/does-not-need-to-exist/demo.ssf', dryRun: true });
 console.log(JSON.stringify(r1, null, 1).slice(0, 900));
 console.log('');
 console.log('--- skin_list_installed ---');

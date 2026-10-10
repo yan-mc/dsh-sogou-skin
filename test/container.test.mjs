@@ -5,9 +5,11 @@ import { readSkin, writeSkin, decryptV3, buildV3Inner, parseV3Plain, V3_KEY, V3_
 import { readZip, writeZip, crc32 } from '../src/ssf/zip.js';
 import { createHash } from 'node:crypto';
 
-const ROOT = 'F:/Deepseek_harness/输入法皮肤/00-原始样本/';
-const A = ROOT + '雷电将军影宝.ssf';
-const B = ROOT + '原神—雷电将军.ssf';
+// 真实样本因版权不在仓库里。用 SOGOU_SKIN_SAMPLES 指一个目录即可纳入比对（见 test/_paths.mjs）。
+import { sample, skip } from './_paths.mjs';
+const A = sample('雷电将军影宝.ssf');
+const B = sample('原神—雷电将军.ssf');
+if (skip('容器层真实样本往返（需要本地 .ssf 样本）', A)) process.exit(0);
 const sha = (u8) => createHash('sha256').update(Buffer.from(u8)).digest('hex').slice(0, 16);
 
 console.log('=========== 样本 A（明文 ZIP 代际） ===========');
