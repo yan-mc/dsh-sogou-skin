@@ -352,7 +352,13 @@ export function detectMargins(r, opts = {}) {
     // 右侧留白给立绘：底图右边缘到纯色区右边缘的距离
     const artReserve = r.width - (solid.x + solid.w);
     const pinyin_marge = [top, bottom, left, Math.max(pad, Math.round(artReserve * 0.15))];
-    const zhongwen_marge = [Math.max(pad, solid.y), bottom, left, Math.max(pad, artReserve)];
+    // ⚠️ zhongwen_marge[0] 是【候选行相对拼音行的间距】，不是绝对 y！
+    // 位置公式：候选行 y = pinyin_marge[0] + font_size + zhongwen_marge[0]
+    // 真实皮肤里这个值是 5~8（雷电将军 7、原神 8）。
+    // 这里原来填的是 solid.y（面板顶的绝对位置），会让候选行往下偏一百多像素 ——
+    // 而且因为 pinyin_marge[0] 已经承载了绝对位置，两排会直接拉开一大截。
+    const rowGap = opts.rowGap ?? 6;
+    const zhongwen_marge = [rowGap, bottom, left, Math.max(pad, artReserve)];
     return {
         pinyin_marge, zhongwen_marge,
         note: '由纯色区 ' + solid.x + ',' + solid.y + ' ' + solid.w + 'x' + solid.h + ' 反推；请用预览图复核',

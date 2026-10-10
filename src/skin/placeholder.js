@@ -63,8 +63,11 @@ export function placeholderGeometry(slot, opts = {}) {
         return {
             nineSlice: { left: 100, right: Math.round(W * 0.42), top: barY - 4, bottom: 6 },
             margins: {
+                // ⚠️ pinyin_marge[0] 是【绝对 y】，zhongwen_marge[0] 是【候选行相对拼音行的间距】。
+                // 位置公式：候选行 y = pinyin_marge[0] + font_size + zhongwen_marge[0]
+                // 原来这里两行都填了 barY + 10，等于让候选行又往下偏了 (barY+10) 像素。
                 pinyin_marge: [barY + 10, 12, 14, Math.round(W * 0.42)],
-                zhongwen_marge: [barY + 10, 12, 72, Math.round(W * 0.42)],
+                zhongwen_marge: [8, 12, 72, Math.round(W * 0.42)],
             },
         };
     }
@@ -76,8 +79,10 @@ export function placeholderGeometry(slot, opts = {}) {
         return {
             nineSlice: { left: barX + 6, right: W - barX - barW, top: 30, bottom: 24 },
             margins: {
+                // 同上：zhongwen_marge[0] 是间距。原意是"候选行落在 y=44"，
+                // 按公式 14 + 16 + 间距 = 44，所以间距应为 14。
                 pinyin_marge: [14, 14, barX + 12, W - barX - barW + 8],
-                zhongwen_marge: [44, 20, barX + 12, W - barX - barW + 8],
+                zhongwen_marge: [14, 20, barX + 12, W - barX - barW + 8],
             },
         };
     }
