@@ -637,7 +637,27 @@ export function registerTools(ctx, env) {
                 }
                 out.push({ dir, exists: existsSync(dir), count: items.length, skins: items });
             }
-            return { ok: true, dirs: out };
+            // 什么都没找到时，明确告诉用户【去哪里找】再回来指定，而不是干巴巴一个空数组。
+            // 这条是被真实情况逼出来的：本机装的是搜狗医生版，用户数据在
+            // %USERPROFILE%\AppData\LocalLow\SogouYS\AllSkin —— 既不在 Local 也不在 APPDATA，
+            // 常规经验完全找不到，卡了很久。
+            const total = out.reduce((a, d) => a + d.count, 0);
+            if (!total) {
+                return {
+                    ok: true,
+                    dirs: out,
+                    hint: '没有在常见位置找到任何 .ssf 皮肤。可以这样定位你自己的皮肤目录：\n'
+                        + '  1) 打开搜狗输入法 → 属性设置 → 外观 → 皮肤，看"皮肤管理"里的路径提示；\n'
+                        + '  2) 或者在文件管理器里搜 AllSkin 这个目录名；\n'
+                        + '  3) 再把这个工具重跑一次，target 填那个目录。\n'
+                        + '已知的常见分布：\n'
+                        + '  · 标准版搜狗：%APPDATA%\\SogouInput\\AllSkin 或 <安装目录>\\AllSkin\n'
+                        + '  · 搜狗医生版：%USERPROFILE%\\AppData\\LocalLow\\SogouYS\\AllSkin（注意是 LocalLow）\n'
+                        + '  · 部分版本：%LOCALAPPDATA%\\SogouInput\\AllSkin',
+                    searched: SOGOU_HINTS,
+                };
+            }
+            return { ok: true, dirs: out, total };
         });
 
     return { registered: count };
@@ -658,20 +678,32 @@ const SOGOU_HINTS = [
 function detectSogouSkinDirs() {
     /** @type {string[]} */
     const found = [];
+    // ⚠️ LocalLow 是 Local 的【兄弟】目录，不是子目录。
+    // 早先写成 join(LOCALAPPDATA, 'Low', ...) 会拼出 AppData\Local\Low —— 那个路径不存在，
+    // 于是两条 LocalLow 候选全是死路径，探测只剩 USERPROFILE 兜底在起作用。
+    // 一旦 USERPROFILE 缺失（服务账户、精简容器），搜狗医生版的皮肤就完全找不到。
+    const localLow = (() => {
+        if (process.env.LOCALAPPDATA) return process.env.LOCALAPPDATA.replace(/[\\/]Local[\\/]?$/, '') + '\\LocalLow';
+        if (process.env.USERPROFILE) return join(process.env.USERPROFILE, 'AppData', 'LocalLow');
+        return '';
+    })();
     const roots = [
+        // ① 程序安装目录（部分版本把皮肤直接装在版本子目录下）
         'C:\\Program Files (x86)\\SogouYSInput',
         'C:\\Program Files\\SogouYSInput',
         'C:\\Program Files (x86)\\SogouInput',
         'C:\\Program Files\\SogouInput',
         'D:\\SogouInput',
+        // ② 标准版搜狗的用户数据
         join(process.env.APPDATA || '', 'SogouInput'),
         join(process.env.LOCALAPPDATA || '', 'SogouInput'),
-        // 实测有效：搜狗医生版把用户皮肤放在 LocalLow\SogouYS 下（不是 Local，也不是 APPDATA）
-        join(process.env.LOCALAPPDATA || '', 'Low', 'SogouYS'),
-        join(process.env.LOCALAPPDATA || '', 'Low', 'SogouInput'),
-        join(process.env.USERPROFILE || '', 'AppData', 'LocalLow', 'SogouYS'),
-        join(process.env.USERPROFILE || '', 'AppData', 'LocalLow', 'SogouInput'),
-    ];
+        join(process.env.APPDATA || '', 'SogouYS'),
+        join(process.env.LOCALAPPDATA || '', 'SogouYS'),
+        // ③ LocalLow ——【实测有效】搜狗医生版把用户皮肤放在 LocalLow\SogouYS\AllSkin
+        //    （既不在 Local，也不在 APPDATA）
+        localLow && join(localLow, 'SogouYS'),
+        localLow && join(localLow, 'SogouInput'),
+    ].filter(Boolean);
     for (const root of roots) {
         if (!root || !existsSync(root)) continue;
         // 直接就是 AllSkin 的情况
