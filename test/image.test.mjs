@@ -6,9 +6,10 @@ import { create, clone, getPixel, setPixel, fillRect, resize, crop, paste, conta
     sheetCells, autoSheetCells, outline } from '../src/image/raster.js';
 import { encodePng, decodePng, isPng } from '../src/image/png.js';
 import { encodeBmp24, decodeBmp, isBmp } from '../src/image/bmp.js';
+import { tmpDir } from './_paths.mjs';
 
-const OUT = 'F:/Deepseek_harness/输入法皮肤/06-工作记录/imgtest';
-mkdirSync(OUT, { recursive: true });
+// 产物写到系统临时目录 —— 测试绝不往仓库外乱写（见 test/_paths.mjs）
+const OUT = tmpDir('imgtest');
 let pass = 0;
 const t = (name, fn) => { try { fn(); pass++; console.log('  ok  ' + name); } catch (e) { console.log('  FAIL ' + name + ' :: ' + e.message); process.exitCode = 1; } };
 

@@ -7,8 +7,10 @@ import { decodeBmp } from '../src/image/bmp.js';
 import { drawText, measureText } from '../src/image/font5x7.js';
 import { initProject, saveProject, loadProject, assembleSkin, writeSkinDir, buildSsf } from '../src/skin/assemble.js';
 import { OVERLAY_PRESETS } from '../src/skin/spec.js';
+import { tmpDir } from './_paths.mjs';
 
-const DIR = 'F:/Deepseek_harness/输入法皮肤/07-皮肤工程/演示-浮层按钮';
+// 这是个自建工程的演示，产物丢临时目录即可（见 test/_paths.mjs）
+const DIR = tmpDir('overlay-demo');
 mkdirSync(join(DIR, 'assets'), { recursive: true });
 
 // ---- 1) 程序化画两个翻页箭头（不涉及任何第三方素材） ----

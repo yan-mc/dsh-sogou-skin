@@ -3,9 +3,11 @@ import { renderMock, renderStretchTest, toPng } from '../src/skin/preview.js';
 import { writeFileSync, mkdirSync, readFileSync, copyFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const DIR = 'F:/Deepseek_harness/输入法皮肤/07-皮肤工程/复刻-雷电将军';
-const OUT = 'F:/Deepseek_harness/输入法皮肤/06-工作记录/stretch';
-mkdirSync(OUT, { recursive: true });
+// 需要一份真实的皮肤工程（因版权不在仓库里）。没配 SOGOU_SKIN_PROJECTS 就跳过。
+import { project, tmpDir, skip } from './_paths.mjs';
+const DIR = project('复刻-雷电将军');
+const OUT = tmpDir('stretch');
+if (skip('九宫格拉伸体检', DIR)) process.exit(0);
 const base = loadProject(DIR);
 
 async function build(project, tag) {
